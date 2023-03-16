@@ -12,6 +12,7 @@ specifiers:
   '@unocss/preset-typography': ^0.50.3
   '@unocss/reset': ^0.50.1
   astro: ^2.0.15
+  bcrypt: ^5.1.0
   eventsource-parser: ^0.1.0
   highlight.js: ^11.7.0
   js-sha256: ^0.9.0
@@ -32,6 +33,7 @@ dependencies:
   '@astrojs/vercel': 3.2.0_astro@2.1.2+react@18.2.0
   '@unocss/reset': 0.50.4
   astro: 2.1.2
+  bcrypt: 5.1.0
   eventsource-parser: 0.1.0
   highlight.js: 11.7.0
   js-sha256: 0.9.0
@@ -1309,6 +1311,18 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
+  /bcrypt/5.1.0:
+    resolution: {integrity: sha512-RHBS7HI5N5tEnGTmtR/pppX0mmDSBpQ4aCBsj7CEQfYXDcO74A8sIBYcJMuCsis2E81zDxeENYhv66oZwLiA+Q==}
+    engines: {node: '>= 10.0.0'}
+    requiresBuild: true
+    dependencies:
+      '@mapbox/node-pre-gyp': 1.0.10
+      node-addon-api: 5.1.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
     dev: false
 
   /binary-extensions/2.2.0:
@@ -3115,6 +3129,10 @@ packages:
     resolution: {integrity: sha512-63mVyqaqt0cmn2VcI2aH6kxe1rLAmSROqHMA0i4qqg1tidkfExgpb0FGMikMCn86mw5dFtBtEANfmSSK7TjNHw==}
     dependencies:
       '@types/nlcst': 1.0.0
+    dev: false
+
+  /node-addon-api/5.1.0:
+    resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
     dev: false
 
   /node-fetch-native/1.0.2:
