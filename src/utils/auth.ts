@@ -1,5 +1,4 @@
 import { sha256 } from 'js-sha256'
-import bcrypt from 'bcrypt'
 interface AuthPayload {
   t: number
   m: string
@@ -32,11 +31,7 @@ export const verifySignature = async (payload: AuthPayload, sign: string) => {
 }
 
 export const cryptPasswrod = async (password: string) => {
-  const saltRounds = 10;
-  const myPlaintextPassword = password;
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hash = bcrypt.hashSync(myPlaintextPassword, salt);
-  return hash
+  return await digestMessage(password)
 }
 
 
