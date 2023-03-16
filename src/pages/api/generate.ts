@@ -16,8 +16,12 @@ export const post: APIRoute = async (context) => {
   if (!messages) {
     return new Response('No input text')
   }
-  if (sitePassword && cryptPasswrod(sitePassword) !== pass) {
-    return new Response('Invalid password')
+  if (sitePassword) {
+    const realPass = await cryptPasswrod(sitePassword)
+    if (realPass !== pass) {
+      return new Response('Invalid password')
+    }
+    
   }
   if (import.meta.env.PROD && !await verifySignature({ t: time, m: messages?.[messages.length - 1]?.content || '', }, sign)) {
     return new Response('Invalid signature')
