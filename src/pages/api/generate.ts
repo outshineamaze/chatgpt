@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { generatePayload, parseOpenAIStream } from '@/utils/openAI'
-import { verifySignature } from '@/utils/auth'
+import { verifySignature, cryptPasswrod } from '@/utils/auth'
 // #vercel-disable-blocks
 import { fetch, ProxyAgent } from 'undici'
 // #vercel-end
@@ -16,7 +16,7 @@ export const post: APIRoute = async (context) => {
   if (!messages) {
     return new Response('No input text')
   }
-  if (sitePassword && sitePassword !== pass) {
+  if (sitePassword && cryptPasswrod(sitePassword) !== pass) {
     return new Response('Invalid password')
   }
   if (import.meta.env.PROD && !await verifySignature({ t: time, m: messages?.[messages.length - 1]?.content || '', }, sign)) {
