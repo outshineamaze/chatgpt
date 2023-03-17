@@ -32,9 +32,9 @@ export default () => {
   const [controller, setController] = createSignal<AbortController>(null)
 
 
-  onMount(async () => {
+  onMount(() => {
     try {
-      await checkCurrentAuth()
+      // await checkCurrentAuth()
       if (localStorage.getItem('messageList')) {
         setMessageList(JSON.parse(localStorage.getItem('messageList')))
       }
