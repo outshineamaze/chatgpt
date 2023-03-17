@@ -6,6 +6,22 @@ import SystemRoleSettings from './SystemRoleSettings'
 import { generateSignature } from '@/utils/auth'
 import { useThrottleFn } from 'solidjs-use'
 
+async function checkCurrentAuth() {
+  const password = localStorage.getItem('pass')
+  const response = await fetch('/api/auth', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      pass: password,
+    }),
+  })
+  const responseJson = await response.json()
+  if (responseJson.code !== 0) {
+    window.location.href = '/password'
+  }
+}
 export default () => {
   let inputRef: HTMLTextAreaElement
   const [currentSystemRoleSettings, setCurrentSystemRoleSettings] = createSignal('')
@@ -18,6 +34,7 @@ export default () => {
 
   onMount(() => {
     try {
+      checkCurrentAuth()
       if (localStorage.getItem('messageList')) {
         setMessageList(JSON.parse(localStorage.getItem('messageList')))
       }
@@ -176,6 +193,7 @@ export default () => {
 
   return (
     <div my-6>
+      《Auth
       <SystemRoleSettings
         canEdit={() => messageList().length === 0}
         systemRoleEditing={systemRoleEditing}
