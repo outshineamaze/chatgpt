@@ -32,9 +32,9 @@ export default () => {
   const [controller, setController] = createSignal<AbortController>(null)
 
 
-  onMount(() => {
+  onMount(async () => {
     try {
-      checkCurrentAuth()
+      await checkCurrentAuth()
       if (localStorage.getItem('messageList')) {
         setMessageList(JSON.parse(localStorage.getItem('messageList')))
       }
@@ -193,7 +193,6 @@ export default () => {
 
   return (
     <div my-6>
-      《Auth
       <SystemRoleSettings
         canEdit={() => messageList().length === 0}
         systemRoleEditing={systemRoleEditing}
