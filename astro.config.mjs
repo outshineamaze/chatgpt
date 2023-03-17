@@ -4,12 +4,13 @@ import solidJs from '@astrojs/solid-js'
 import vercelDisableBlocks from './plugins/vercelDisableBlocks'
 import svelte from "@astrojs/svelte";
 import node from '@astrojs/node'
+import vercel from '@astrojs/vercel/edge'
 import netlify from "@astrojs/netlify/edge-functions";
 
 const envAdapter = () => {
   if (process.env.OUTPUT == 'vercel') {
     return node({
-      mode: 'standalone'
+      mode: 'middleware'
     })
   } else if (process.env.OUTPUT == 'netlify') {
     return netlify()
