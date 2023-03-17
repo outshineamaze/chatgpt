@@ -5,8 +5,53 @@ import MessageItem from './MessageItem'
 import SystemRoleSettings from './SystemRoleSettings'
 import { generateSignature } from '@/utils/auth'
 import { useThrottleFn } from 'solidjs-use'
+import ShareLinkButton from './Share'
 
 async function checkCurrentAuth() {
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const shareLinkId =urlParams.get("share_link_id");
+  if (shareLinkId) {
+    const urlWithoutParams = window.location.origin + window.location.pathname;
+    const response = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        // pass: password,
+        share_link_id: shareLinkId,
+      }),
+    })
+    const responseJson = await response.json()
+    if (responseJson.code !== 0) {
+      window.location.href = '/password'
+    }
+    localStorage.setItem("shareLinkId", shareLinkId);
+    window.history.replaceState({}, document.title, urlWithoutParams);
+    return
+  }
+
+  const localShareLinkId = localStorage.getItem('shareLinkId')
+  if (localShareLinkId) {
+    const response = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        // pass: password,
+        share_link_id: localShareLinkId,
+      }),
+    })
+    const responseJson = await response.json()
+    if (responseJson.code !== 0) {
+      localStorage.removeItem("shareLinkId");localStorage
+      window.location.href = '/password'
+    }
+    return
+  }
+
   const password = localStorage.getItem('pass')
   const response = await fetch('/api/auth', {
     method: 'POST',
@@ -246,6 +291,7 @@ export default () => {
           <button title="Clear" onClick={clear} disabled={systemRoleEditing()} gen-slate-btn>
             <IconClear />
           </button>
+          <ShareLinkButton/>
         </div>
       </Show>
     </div>
