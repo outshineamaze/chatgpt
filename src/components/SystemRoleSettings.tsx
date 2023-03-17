@@ -35,7 +35,15 @@ export default (props: Props) => {
         <Show when={!props.currentSystemRoleSettings() && props.canEdit()}>
           <span onClick={() => props.setSystemRoleEditing(!props.systemRoleEditing())} class="sys-edit-btn">
             <IconEnv />
-            <span>Add System Role</span>
+            <span>手动输入设置系统角色</span>
+          </span>
+          <span onClick={() => (alert("功能待支持"))} class="sys-edit-btn">
+            <IconEnv />
+            <span>选择一个系统角色提示</span>
+          </span>
+          <span onClick={() => (alert("功能待支持"))} class="sys-edit-btn">
+            <IconEnv />
+            <span>关键词生成系统角色提示</span>
           </span>
         </Show>
       </Show>

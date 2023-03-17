@@ -1,7 +1,7 @@
-
 // ShareLinkButton component
 const ShareLinkButton = () => {
   const password = localStorage.getItem('pass')
+
   const copyToClipboard = async () => {
     try {
       const password = localStorage.getItem('pass')
@@ -18,6 +18,7 @@ const ShareLinkButton = () => {
         if (responseJson.code === 0) {
             const shareLink = responseJson.sharelink;
             await navigator.clipboard.writeText(shareLink);
+            alert("链接已经复制: " + shareLink)
         }
     } catch (err) {
       console.error("Failed to copy text: ", err);
@@ -27,7 +28,6 @@ const ShareLinkButton = () => {
     password ? (<button onClick={copyToClipboard} gen-slate-btn>
       ShareLink
     </button>) : null
-    
   );
 };
 

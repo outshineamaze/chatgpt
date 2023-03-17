@@ -4,6 +4,9 @@ import { verifySignature, cryptPasswrod } from '@/utils/auth'
 // #vercel-disable-blocks
 import { fetch, ProxyAgent } from 'undici'
 // #vercel-end
+import {
+  isShareLinkQuotaReachedForGenerate
+} from '@/utils/share'
 
 const apiKey = import.meta.env.OPENAI_API_KEY
 const httpsProxy = import.meta.env.HTTPS_PROXY
@@ -12,11 +15,20 @@ const sitePassword = import.meta.env.SITE_PASSWORD
 
 export const post: APIRoute = async (context) => {
   const body = await context.request.json()
-  const { sign, time, messages, pass } = body
+  const { sign, time, messages, pass, share_link_id } = body
   if (!messages) {
     return new Response('No input text')
   }
-  if (sitePassword) {
+  let isShareLinkValidateSuccess = false;
+  if (share_link_id) {
+    if (await isShareLinkQuotaReachedForGenerate(share_link_id)) {
+      return new Response('quota limited')
+    } else {
+      isShareLinkValidateSuccess = true;
+    }
+  }
+ 
+  if (!isShareLinkValidateSuccess && sitePassword) {
     const realPass = await cryptPasswrod(sitePassword)
     if (realPass !== pass) {
       return new Response('Invalid password')

@@ -12,7 +12,7 @@ export const post: APIRoute = async (context) => {
     const { pass } = body
     const auth = (!realPassword || pass === realPasswordHash)
     if (auth) {
-      const sharLink = await generateShareLink(100)
+      const sharLink = await generateShareLink(5, context.url.host)
       return new Response(JSON.stringify({
         code: 0,
         sharelink: sharLink,

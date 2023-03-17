@@ -7,9 +7,9 @@ const requestQuotaCollection = db.collection("requestQuota");
 
 
 // Generate share link with request quota limit
-export async function generateShareLink(quotaLimit: number): Promise<string> {
+export async function generateShareLink(quotaLimit: number, baseUrl: string): Promise<string> {
     const shareLinkId = Math.random().toString(36).substr(2, 10);
-    const shareLink = `https://chatgpt.outshine.me/?share_link_id=${shareLinkId}`;
+    const shareLink = `${baseUrl}?share_link_id=${shareLinkId}`;
     await requestQuotaCollection.insertOne({ _id: shareLinkId, quotaLimit, requests: 0 });
     return shareLink;
 }
@@ -22,4 +22,20 @@ export async function isShareLinkQuotaReached(shareLinkId: string): Promise<bool
       return true;
   }
   return shareLinkData.requests >= shareLinkData.quotaLimit;
+}
+
+
+// Function to validate if the share link has reached the request quota
+export async function isShareLinkQuotaReachedForGenerate(shareLinkId: string): Promise<boolean> {
+  const shareLinkData = await requestQuotaCollection.findOne({ _id: shareLinkId });
+  if (!shareLinkData) {
+      return true;
+  }
+  if (shareLinkData.requests >= shareLinkData.quotaLimit) {
+    return true
+  }
+  await requestQuotaCollection.updateOne({ _id: shareLinkId }, {
+    "$set": {"requests": shareLinkData.requests+1}
+  })
+  return false;
 }

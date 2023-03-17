@@ -127,6 +127,8 @@ export default () => {
     setLoading(true)
     setCurrentAssistantMessage('')
     const storagePassword = localStorage.getItem('pass')
+    const shareLinkId = localStorage.getItem('shareLinkId')
+    
     try {
       const controller = new AbortController()
       setController(controller)
@@ -144,6 +146,7 @@ export default () => {
           messages: requestMessageList,
           time: timestamp,
           pass: storagePassword,
+          share_link_id: shareLinkId ? shareLinkId : undefined,
           sign: await generateSignature({
             t: timestamp,
             m: requestMessageList?.[requestMessageList.length - 1]?.content || '',
