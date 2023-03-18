@@ -8,6 +8,16 @@ import { useThrottleFn } from 'solidjs-use'
 import ShareLinkButton from './Share'
 
 
+const isSafari = () => {
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const  isWebkit = /webkit/i.test(navigator.userAgent);
+  if (isSafari && isWebkit) {
+    return true
+  } else {
+    return false;
+  }
+}
+
 export default () => {
   let inputRef: HTMLTextAreaElement
   const [currentSystemRoleSettings, setCurrentSystemRoleSettings] = createSignal('')
@@ -57,7 +67,7 @@ export default () => {
     window.location.href = '/password'
   }
 
-  onMount(async () => {
+  onMount(() => {
     try {
       if (localStorage.getItem('messageList')) {
         setMessageList(JSON.parse(localStorage.getItem('messageList')))
@@ -65,13 +75,21 @@ export default () => {
       if (localStorage.getItem('systemRoleSettings')) {
         setCurrentSystemRoleSettings(localStorage.getItem('systemRoleSettings'))
       }
-      await checkCurrentAuth()
+      checkCurrentAuth()
     } catch (err) {
       console.error(err)
     }
-    
+    let timer
+    if (isSafari()) {
+      timer = setInterval(()=>{
+        handleBeforeUnload()
+      }, 3000)
+    }
     window.addEventListener('beforeunload', handleBeforeUnload)
     onCleanup(() => {
+      if (isSafari() && timer) {
+        clearInterval(timer)
+      }
       window.removeEventListener('beforeunload', handleBeforeUnload)
     })
   })
@@ -190,6 +208,7 @@ export default () => {
     setMessageList([])
     setCurrentAssistantMessage('')
     setCurrentSystemRoleSettings('')
+    handleBeforeUnload()
   }
 
   const stopStreamFetch = () => {
