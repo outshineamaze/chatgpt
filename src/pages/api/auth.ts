@@ -27,4 +27,7 @@ export const post: APIRoute = async (context) => {
       code: isLinkValidateFail ? -1 : 0,
     }))
   }
+  return new Response(JSON.stringify({
+    code: -1,
+  }))
 }

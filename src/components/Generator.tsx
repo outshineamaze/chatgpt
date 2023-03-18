@@ -54,17 +54,18 @@ export default () => {
       }
       return
     }
+    window.location.href = '/password'
   }
 
   onMount(async () => {
     try {
-      await checkCurrentAuth()
       if (localStorage.getItem('messageList')) {
         setMessageList(JSON.parse(localStorage.getItem('messageList')))
       }
       if (localStorage.getItem('systemRoleSettings')) {
         setCurrentSystemRoleSettings(localStorage.getItem('systemRoleSettings'))
       }
+      await checkCurrentAuth()
     } catch (err) {
       console.error(err)
     }
@@ -267,12 +268,15 @@ export default () => {
             rows="1"
             class='gen-textarea'
           />
+          <br/>
           <button onClick={handleButtonClick} disabled={systemRoleEditing()} gen-slate-btn>
             Send
           </button>
           <button title="Clear" onClick={clear} disabled={systemRoleEditing()} gen-slate-btn>
             <IconClear />
           </button>
+        </div>
+        <div class="gen-text-wrapper fb" class:op-50={systemRoleEditing()}>
           <ShareLinkButton/>
         </div>
       </Show>

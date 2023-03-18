@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { createSignal, onMount, Show } from 'solid-js'
 // ShareLinkButton component
 const ShareLinkButton = () => {
   const [hasPass, setHasPass] = createSignal(false)
@@ -24,19 +24,31 @@ const ShareLinkButton = () => {
         }),
       })
       const responseJson = await response.json()
-        if (responseJson.code === 0) {
-            const shareLink = responseJson.sharelink;
-            await navigator.clipboard.writeText(shareLink);
-            alert("链接已经复制: " + shareLink)
-        }
+      if (responseJson.code === 0) {
+        const shareLink = responseJson.sharelink;
+        await navigator.clipboard.writeText(shareLink);
+        alert("链接已经复制: " + shareLink)
+      }
     } catch (err) {
       console.error("Failed to copy text: ", err);
     }
   };
+  const shareSession = () => {
+    alert("开发中")
+  }
   return (
-    hasPass ? (<button onClick={copyToClipboard} gen-slate-btn>
-      ShareLink
-    </button>) : null
+    <Show
+      when={hasPass()}
+    >
+      <>
+        <button onClick={shareSession} gen-slate-btn>
+          分享该会话
+        </button>
+        <button onClick={copyToClipboard} gen-slate-btn>
+          共享访问(50次问答)
+        </button>
+      </>
+    </Show>
   );
 };
 
