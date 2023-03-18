@@ -7,66 +7,7 @@ import { generateSignature } from '@/utils/auth'
 import { useThrottleFn } from 'solidjs-use'
 import ShareLinkButton from './Share'
 
-async function checkCurrentAuth() {
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const shareLinkId =urlParams.get("share_link_id");
-  if (shareLinkId) {
-    const urlWithoutParams = window.location.origin + window.location.pathname;
-    const response = await fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // pass: password,
-        share_link_id: shareLinkId,
-      }),
-    })
-    const responseJson = await response.json()
-    if (responseJson.code !== 0) {
-      window.location.href = '/password'
-    }
-    localStorage.setItem("shareLinkId", shareLinkId);
-    window.history.replaceState({}, document.title, urlWithoutParams);
-    return
-  }
-
-  const localShareLinkId = localStorage.getItem('shareLinkId')
-  if (localShareLinkId) {
-    const response = await fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // pass: password,
-        share_link_id: localShareLinkId,
-      }),
-    })
-    const responseJson = await response.json()
-    if (responseJson.code !== 0) {
-      localStorage.removeItem("shareLinkId");localStorage
-      window.location.href = '/password'
-    }
-    return
-  }
-
-  const password = localStorage.getItem('pass')
-  const response = await fetch('/api/auth', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      pass: password,
-    }),
-  })
-  const responseJson = await response.json()
-  if (responseJson.code !== 0) {
-    window.location.href = '/password'
-  }
-}
 export default () => {
   let inputRef: HTMLTextAreaElement
   const [currentSystemRoleSettings, setCurrentSystemRoleSettings] = createSignal('')
@@ -76,6 +17,44 @@ export default () => {
   const [loading, setLoading] = createSignal(false)
   const [controller, setController] = createSignal<AbortController>(null)
 
+
+  const checkCurrentAuth = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shareLinkIdFromUrl =urlParams.get("share_link_id");
+    if (shareLinkIdFromUrl) {
+      const urlWithoutParams = window.location.origin + window.location.pathname;
+      const responseJson = await fetchAuth(undefined, undefined, shareLinkIdFromUrl)
+      if (responseJson.code !== 0) {
+        window.location.href = '/'
+        return
+      }
+      localStorage.setItem("shareLinkId", shareLinkIdFromUrl);
+      window.history.replaceState({}, document.title, urlWithoutParams);
+      return
+    }
+
+    const password = localStorage.getItem('pass')
+    if (password) {
+      const responseJson = await fetchAuth(undefined, password)
+      if (responseJson.code !== 0) {
+        localStorage.removeItem('pass')
+        window.location.href = '/password'
+        return
+      }
+      return
+    }
+  
+    const localShareLinkId = localStorage.getItem('shareLinkId')
+    if (localShareLinkId) {
+      const responseJson = await fetchAuth(localShareLinkId)
+      if (responseJson.code !== 0) {
+        localStorage.removeItem("shareLinkId");
+        window.location.href = '/password'
+        return
+      }
+      return
+    }
+  }
 
   onMount(async () => {
     try {
@@ -300,3 +279,19 @@ export default () => {
     </div>
   )
 }
+async function fetchAuth(localShareLinkId?: string, password?: string, shareLinkIdFromURl?:string) {
+  const response = await fetch('/api/auth', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      pass: password,
+      share_link_id: localShareLinkId,
+      share_link_id_from_url: shareLinkIdFromURl,
+    })
+  })
+  const responseJson = await response.json()
+  return responseJson
+}
+

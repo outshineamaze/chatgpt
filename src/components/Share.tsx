@@ -1,7 +1,16 @@
+import { createSignal, onMount } from 'solid-js'
 // ShareLinkButton component
 const ShareLinkButton = () => {
-  const password = localStorage.getItem('pass')
-
+  const [hasPass, setHasPass] = createSignal(false)
+  onMount(() => {
+    try {
+      if (localStorage.getItem('pass')) {
+        setHasPass(true)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  })
   const copyToClipboard = async () => {
     try {
       const password = localStorage.getItem('pass')
@@ -25,7 +34,7 @@ const ShareLinkButton = () => {
     }
   };
   return (
-    password ? (<button onClick={copyToClipboard} gen-slate-btn>
+    hasPass ? (<button onClick={copyToClipboard} gen-slate-btn>
       ShareLink
     </button>) : null
   );

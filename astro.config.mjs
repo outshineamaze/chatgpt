@@ -3,8 +3,8 @@ import unocss from 'unocss/astro'
 import solidJs from '@astrojs/solid-js'
 import vercelDisableBlocks from './plugins/vercelDisableBlocks'
 import node from '@astrojs/node'
-import vercel from '@astrojs/vercel/serverless'
-import netlify from "@astrojs/netlify/functions";
+import vercel from '@astrojs/vercel/edge'
+import netlify from "@astrojs/netlify/edge-functions";
 
 const envAdapter = () => {
   if (process.env.OUTPUT == 'vercel') {

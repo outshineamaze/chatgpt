@@ -19,21 +19,18 @@ export const post: APIRoute = async (context) => {
   if (!messages) {
     return new Response('No input text')
   }
-  let isShareLinkValidateSuccess = false;
-  if (share_link_id) {
-    if (await isShareLinkQuotaReachedForGenerate(share_link_id)) {
-      return new Response('quota limited')
-    } else {
-      isShareLinkValidateSuccess = true;
-    }
-  }
- 
-  if (!isShareLinkValidateSuccess && sitePassword) {
+  let isPassValidateSuccess = false;
+  if (sitePassword && pass) {
     const realPass = await cryptPasswrod(sitePassword)
     if (realPass !== pass) {
       return new Response('Invalid password')
     }
-    
+    isPassValidateSuccess = true;
+  }
+  if (share_link_id && !isPassValidateSuccess) {
+    if (await isShareLinkQuotaReachedForGenerate(share_link_id)) {
+      return new Response('quota limited')
+    }
   }
   if (import.meta.env.PROD && !await verifySignature({ t: time, m: messages?.[messages.length - 1]?.content || '', }, sign)) {
     return new Response('Invalid signature')
