@@ -12,6 +12,7 @@ const ShareLinkButton = () => {
     }
   })
   const copyToClipboard = async () => {
+    let finalShareLink = ""
     try {
       const password = localStorage.getItem('pass')
       const response = await fetch('/api/gensharelink', {
@@ -26,10 +27,12 @@ const ShareLinkButton = () => {
       const responseJson = await response.json()
       if (responseJson.code === 0) {
         const shareLink = responseJson.sharelink;
+        finalShareLink = shareLink
         await navigator.clipboard.writeText(shareLink);
         alert("链接已经复制: " + shareLink)
       }
     } catch (err) {
+      alert("请手动复制: " + finalShareLink)
       console.error("Failed to copy text: ", err);
     }
   };
