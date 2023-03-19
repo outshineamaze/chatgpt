@@ -9,10 +9,10 @@ const realPassword = import.meta.env.SITE_PASSWORD
 export const post: APIRoute = async (context) => {
   const body = await context.request.json()
   const realPasswordHash = await cryptPasswrod(realPassword)
-    const { pass } = body
+    const { pass, messageList } = body
     const auth = (!realPassword || pass === realPasswordHash)
     if (auth) {
-      const sharLink = await generateShareLink(50, context.url.host)
+      const sharLink = await generateShareLink(50, context.url.origin, messageList)
       return new Response(JSON.stringify({
         code: 0,
         sharelink: sharLink,

@@ -29,15 +29,45 @@ const ShareLinkButton = () => {
         const shareLink = responseJson.sharelink;
         finalShareLink = shareLink
         await navigator.clipboard.writeText(shareLink);
-        alert("链接已经复制: " + shareLink)
+        alert("链接已经复制(分享链接可以问答50次): " + shareLink)
       }
     } catch (err) {
-      alert("请手动复制: " + finalShareLink)
+      if(finalShareLink) {
+        alert("请手动复制(分享链接可以问答50次): " + finalShareLink)
+      }
       console.error("Failed to copy text: ", err);
     }
   };
-  const shareSession = () => {
-    alert("开发中")
+  const shareSession = async () => {
+    let finalShareLink = ""
+    try {
+      const password = localStorage.getItem('pass')
+      const messageList = JSON.parse(localStorage.getItem('messageList'))
+      if (Array.isArray(messageList) && messageList.length >= 2) {
+        const response = await fetch('/api/gensharelink', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            pass: password,
+            messageList: messageList.slice(-20)
+          }),
+        })
+        const responseJson = await response.json()
+        if (responseJson.code === 0) {
+          const shareLink = responseJson.sharelink;
+          finalShareLink = shareLink
+          await navigator.clipboard.writeText(shareLink);
+          alert("链接已经复制，仅分享当前页面最近的10次对话， 且分享链接内其他用户还能继续对话50次， 链接: " + shareLink)
+        }
+      }
+    } catch (err) {
+      if(finalShareLink) {
+        alert("请手动复制， 仅分享当前页面最近的10次对话， 且分享链接内其他用户还能继续对话50次， 链接: " + finalShareLink)
+      }
+      console.error("Failed to copy text: ", err);
+    }
   }
   return (
     <Show
@@ -48,7 +78,7 @@ const ShareLinkButton = () => {
           分享该会话
         </button>
         <button onClick={copyToClipboard} gen-slate-btn>
-          共享访问(50次问答)
+          分享访问链接
         </button>
       </>
     </Show>

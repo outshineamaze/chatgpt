@@ -39,6 +39,9 @@ export default () => {
         return
       }
       localStorage.setItem("shareLinkId", shareLinkIdFromUrl);
+      if (Array.isArray(responseJson.messageList) && responseJson.messageList.length >= 2) {
+        setMessageList(responseJson.messageList)
+      }
       window.history.replaceState({}, document.title, urlWithoutParams);
       return
     }
