@@ -1,4 +1,6 @@
 import { createSignal, onMount, Show } from 'solid-js'
+import html2canvas from 'html2canvas';
+
 // ShareLinkButton component
 const ShareLinkButton = () => {
   const [hasPass, setHasPass] = createSignal(false)
@@ -32,7 +34,7 @@ const ShareLinkButton = () => {
         alert("链接已经复制(分享链接可以问答50次): " + shareLink)
       }
     } catch (err) {
-      if(finalShareLink) {
+      if (finalShareLink) {
         alert("请手动复制(分享链接可以问答50次): " + finalShareLink)
       }
       console.error("Failed to copy text: ", err);
@@ -63,19 +65,45 @@ const ShareLinkButton = () => {
         }
       }
     } catch (err) {
-      if(finalShareLink) {
+      if (finalShareLink) {
         alert("请手动复制， 仅分享当前页面最近的10次对话， 且分享链接内其他用户还能继续对话50次， 链接: " + finalShareLink)
       }
       console.error("Failed to copy text: ", err);
     }
+  }
+  const capturePage = () => {
+
+    // 获取当前页面的高度和宽度
+    var pageHeight = document.documentElement.scrollHeight;
+    var pageWidth = document.documentElement.scrollWidth;
+  
+    // 创建一个canvas对象，并设置它的宽度和高度
+    var canvas = document.createElement('canvas');
+    canvas.width = pageWidth;
+    canvas.height = pageHeight;
+
+    // 将当前页面渲染到canvas对象上
+    html2canvas(document.documentElement).then(function (canvas) {
+      // 将 Canvas 转换为 Data URL
+      var dataURL = canvas.toDataURL('image/png');
+      // 创建下载链接
+      var downloadLink = document.createElement('a');
+      downloadLink.href = dataURL;
+      downloadLink.download = 'long-screenshot.png';
+      // 触发下载操作
+      downloadLink.click();
+    });
   }
   return (
     <Show
       when={hasPass()}
     >
       <>
+        <button onClick={capturePage} gen-slate-btn>
+          长截图
+        </button>
         <button onClick={shareSession} gen-slate-btn>
-          分享该会话
+          分享会话
         </button>
         <button onClick={copyToClipboard} gen-slate-btn>
           分享访问链接
