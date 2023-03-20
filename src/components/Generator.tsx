@@ -83,16 +83,12 @@ export default () => {
       console.error(err)
     }
     let timer
-    if (isSafari()) {
       timer = setInterval(()=>{
         handleBeforeUnload()
       }, 3000)
-    }
     window.addEventListener('beforeunload', handleBeforeUnload)
     onCleanup(() => {
-      if (isSafari() && timer) {
-        clearInterval(timer)
-      }
+      clearInterval(timer)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     })
   })
