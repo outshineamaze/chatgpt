@@ -76,7 +76,7 @@ const ShareLinkButton = () => {
     // 获取当前页面的高度和宽度
     var pageHeight = document.documentElement.scrollHeight;
     var pageWidth = document.documentElement.scrollWidth;
-  
+
     // 创建一个canvas对象，并设置它的宽度和高度
     var canvas = document.createElement('canvas');
     canvas.width = pageWidth;
@@ -95,21 +95,26 @@ const ShareLinkButton = () => {
     });
   }
   return (
-    <Show
-      when={hasPass()}
-    >
-      <>
-        <button onClick={capturePage} gen-slate-btn>
-          长截图
-        </button>
+
+    <>
+      <button onClick={capturePage} gen-slate-btn>
+        长截图
+      </button>
+      <Show
+        when={hasPass()}
+      >
         <button onClick={shareSession} gen-slate-btn>
           分享会话
         </button>
+      </Show>
+      <Show
+        when={hasPass()}
+      >
         <button onClick={copyToClipboard} gen-slate-btn>
           分享访问链接
         </button>
-      </>
-    </Show>
+      </Show>
+    </>
   );
 };
 
