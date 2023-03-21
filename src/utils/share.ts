@@ -99,7 +99,7 @@ export async function isShareLinkQuotaReachedForGenerate(shareLinkId: string): P
         shareLinkId,
       },
       update: {
-        "$set": { "requests": shareLinkData.requests + 1 }
+        "$set": { "requests": shareLinkData.document.requests + 1 }
       }
     })) as Response
     const updateShareLinkData = await updateRes.json()
