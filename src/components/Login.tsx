@@ -36,9 +36,14 @@ export default () => {
   }
   return (
     <main class="h-screen col-fcc">
-    <div class="op-30">Please input password</div>
+      <div class="col-fcs m-l-35">
+      <div class="op-30">当前网页支持: </div>
+      <div class="op-30  m-l-2">1. 通过密码登录使用</div>
+      <div class="op-30  m-l-2">2. 通过分享链接进入使用(仅密码登录用户才能生成)</div>
+      <div class="op-30  m-l-2"> 例如: https://chatgpt.outshine.me?share_link_id=xxxxx</div>
+      </div>
     <div id="input_container" class="flex mt-4">
-      <input id="password_input" type="password" class="gpt-password-input" ref={inputRef!} onKeyDown={handleKeydown} />
+      <input id="password_input" type="password" placeholder='Please input password' class="gpt-password-input" ref={inputRef!} onKeyDown={handleKeydown} />
       <div id="submit" class="gpt-password-submit" onClick={handleButtonClick}>
         <div class="i-carbon-arrow-right" />
       </div>
