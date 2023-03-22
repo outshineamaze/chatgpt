@@ -1,6 +1,6 @@
 import { createSignal, onMount, Show } from 'solid-js'
 import html2canvas from 'html2canvas';
-
+import { BiRegularScreenshot, BiRegularShare, BiRegularShareAlt } from "solid-icons/bi";
 // ShareLinkButton component
 const ShareLinkButton = () => {
   const [hasPass, setHasPass] = createSignal(false)
@@ -95,23 +95,22 @@ const ShareLinkButton = () => {
     });
   }
   return (
-
     <>
-      <button onClick={capturePage} gen-slate-btn>
-        长截图
+      <button onClick={capturePage} sys-edit-btn>
+        <BiRegularScreenshot size={24} title="长截图" />截图
       </button>
       <Show
         when={hasPass()}
       >
-        <button onClick={shareSession} gen-slate-btn>
-          分享会话
+        <button onClick={shareSession} sys-edit-btn>
+          <BiRegularShare size={24} title="分享会话" />分享会话
         </button>
       </Show>
       <Show
         when={hasPass()}
       >
-        <button onClick={copyToClipboard} gen-slate-btn>
-          分享访问链接
+        <button onClick={copyToClipboard} sys-edit-btn>
+          <BiRegularShareAlt size={24} title="分享访问链接" />共享访问
         </button>
       </Show>
     </>

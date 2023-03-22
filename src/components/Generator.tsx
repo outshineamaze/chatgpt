@@ -6,7 +6,7 @@ import SystemRoleSettings from './SystemRoleSettings'
 import { generateSignature } from '@/utils/auth'
 import { useThrottleFn } from 'solidjs-use'
 import ShareLinkButton from './Share'
-
+import { BiRegularSend } from "solid-icons/bi";
 
 const isSafari = () => {
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -288,7 +288,7 @@ export default () => {
           />
           <br/>
           <button onClick={handleButtonClick} disabled={systemRoleEditing()} gen-slate-btn>
-            Send
+            <BiRegularSend size={24} title="分享会话" />
           </button>
           <button title="Clear" onClick={clear} disabled={systemRoleEditing()} gen-slate-btn>
             <IconClear />

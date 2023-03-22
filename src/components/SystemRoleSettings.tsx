@@ -1,6 +1,7 @@
 import { Show } from 'solid-js'
 import type { Accessor, Setter } from 'solid-js'
 import IconEnv from './icons/Env'
+import { BiRegularSelection, BiRegularSelectMultiple } from "solid-icons/bi";
 
 interface Props {
   canEdit: Accessor<boolean>
@@ -38,11 +39,11 @@ export default (props: Props) => {
             <span>手动输入设置系统角色</span>
           </span>
           <span onClick={() => (alert("功能待支持"))} class="sys-edit-btn">
-            <IconEnv />
+            <BiRegularSelectMultiple size="1rem" title="分享会话" />
             <span>选择一个系统角色提示</span>
           </span>
           <span onClick={() => (alert("功能待支持"))} class="sys-edit-btn">
-            <IconEnv />
+          <BiRegularSelection size="1rem" title="分享会话" />
             <span>关键词生成系统角色提示</span>
           </span>
         </Show>
