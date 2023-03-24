@@ -8,15 +8,6 @@ import { useThrottleFn } from 'solidjs-use'
 import ShareLinkButton from './Share'
 import { BiRegularSend } from "solid-icons/bi";
 
-const isSafari = () => {
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const  isWebkit = /webkit/i.test(navigator.userAgent);
-  if (isSafari && isWebkit) {
-    return true
-  } else {
-    return false;
-  }
-}
 
 export default () => {
   let inputRef: HTMLTextAreaElement

@@ -1,7 +1,7 @@
 import { createSignal, onMount, Show } from 'solid-js'
 import html2canvas from 'html2canvas';
 import { BiRegularScreenshot, BiRegularShare, BiRegularShareAlt } from "solid-icons/bi";
-import { Button, Modal } from "solid-bootstrap";
+import {  Modal } from "solid-bootstrap";
 // ShareLinkButton component
 const ShareLinkButton = () => {
   const [show, setShow] = createSignal(false);
@@ -72,6 +72,8 @@ const ShareLinkButton = () => {
           await navigator.clipboard.writeText(shareLink);
           handleOpen("链接已经复制，仅分享当前页面最近的10次对话， 且分享链接内其他用户还能继续对话50次， 链接: " + shareLink)
         }
+      } else {
+        handleOpen("暂无会话可分享")
       }
     } catch (err) {
       if (finalShareLink) {
@@ -131,7 +133,7 @@ const ShareLinkButton = () => {
           }
         </Modal.Body>
         <Modal.Footer>
-        <button onClick={handleClose} sys-edit-btn>
+        <button onClick={handleClose} dialog-submit-btn>
           确认
         </button>
         </Modal.Footer>
